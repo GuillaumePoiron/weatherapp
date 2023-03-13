@@ -1,33 +1,38 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
-import Constants from 'expo-constants';
-import {StatusBar} from 'expo-status-bar';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {MaterialIcons} from '@expo/vector-icons';
+import HomeScreen from './screens/home/Home';
+
+const Stack = createNativeStackNavigator();
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <SafeAreaProvider>
-      <SafeAreaView
-        style={{flex: 1, backgroundColor: '#1E213A', paddingHorizontal: 16}}>
-        <StatusBar style={'light'} />
-        <View
-          style={{
-            backgroundColor: '#636e72',
-            alignItems: 'center',
-            paddingVertical: 18,
-            borderRadius: 12,
-          }}>
-          <Ionicons name="add-circle" size={30} color='black' />
-          <Text style={{fontSize: 24, fontWeight: 'bold', color: 'black'}}>
-            Weather App
-          </Text>
-          <Text style={{color: 'black'}}>
-            Nom du téléphone : {Constants.deviceName}
-          </Text>
-        </View>
-      </SafeAreaView>
-    </SafeAreaProvider>
+    <QueryClientProvider client={queryClient}>
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: {backgroundColor: '#1E213A'},
+              headerTitle: '',
+              headerShadowVisible: false,
+              // eslint-disable-next-line react/no-unstable-nested-components
+              headerLeft: () => (
+                <MaterialIcons name="my-location" size={24} color="#dfe6e9" />
+              ),
+              // eslint-disable-next-line react/no-unstable-nested-components
+              headerRight: () => (
+                <MaterialIcons name="search" size={24} color="#dfe6e9" />
+              ),
+            }}>
+            <Stack.Screen name="Home" component={HomeScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </SafeAreaProvider>
+    </QueryClientProvider>
   );
 }
 
